@@ -8,7 +8,7 @@ A simple interactive dashboard to switch precision of weights and activations fo
 $ git clone https://github.com/SaiAakash/precision_switch_for_cnn.git
 $ cd precision_switch_for_cnn
 
-**Creating a Conda environment**
+Creating a Conda environment
 
 ```bash
 $ conda create --name precision_switch_env python=3.8
