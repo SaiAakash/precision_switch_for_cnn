@@ -70,7 +70,7 @@
     </div>
     <script>
         function updateMetrics() {
-            fetch('/get_metrics')  // Replace with the correct API endpoint URL
+            fetch('/get_metrics')
                 .then(response => response.json())
                 .then(data => {
                     // Update the HTML elements with the received data
@@ -155,7 +155,7 @@
                 });
         }
     
-        // Call the updateCharts function every 5 seconds (adjust as needed)
+        // Call the updateCharts function every 5 seconds
         setInterval(updateCharts, 5000);
     </script>    
     <script>
@@ -173,7 +173,6 @@
             fetch(`/change_precision?layer=${layer}&precision=${precision}`)
                 .then(response => response.json())
                 .then(data => {
-                    // Handle the response if needed
                     console.log(data.message);
                 })
                 .catch(error => {
