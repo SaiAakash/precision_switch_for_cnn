@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Training Metrics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../static/style.css">
+
+</head>
+<body>
+    <div id="title-container">
+        <p class="center-text">Interactive Dashboard for Mixed Precision Training</p>
+    </div>
+    <div id="metrics-container">
+        <p class="metric-text">Loss: <span id='loss'></span></p>
+        <p class="metric-text">Accuracy(in %): <span id='accuracy'></span></p>
+        <p class="metric-text">Batch Training Time(in seconds): <span id='batch_time'></span></p>
+    </div>
+    <h3>Convolutional Layer 1(No. of Params: 320)</h3>
+    <!-- Precision buttons for Layer 1 -->
+    <form id="layer1-precision-form">
+        <label>
+            <input type="radio" class="precision-radio" name="precisionLayer1" value="torch.float32"> Float32
+        </label>
+        <label>
+            <input type="radio" class="precision-radio" name="precisionLayer1" value="torch.float64"> Float64
+        </label>
+    </form>
+
+     <!-- Precision buttons for Layer 2 -->
+     <h3>Convolutional Layer 2(No. of Params: 18,496)</h3>
+     <form id="layer2-precision-form">
+         <label>
+             <input type="radio" class="precision-radio" name="precisionLayer2" value="torch.float32"> Float32
+         </label>
+         <label>
+             <input type="radio" class="precision-radio" name="precisionLayer2" value="torch.float64"> Float64
+         </label>
+     </form>
+
+     <!-- Precision buttons for Layer 3 -->
+     <h3>Fully Connected Layer 1(No. of Params: 1,179,776)</h3>
+     <form id="layer3-precision-form">
+         <label>
+             <input type="radio" class="precision-radio" name="precisionLayer3" value="torch.float32"> Float32
+         </label>
+         <label>
+             <input type="radio" class="precision-radio" name="precisionLayer3" value="torch.float64"> Float64
+         </label>
+     </form>
+
+     <!-- Precision buttons for Layer 4 -->
+     <h3>Fully Connected Layer 2(No. of Params: 1,290)</h3>
+     <form id="layer4-precision-form">
+         <label>
+             <input type="radio" class="precision-radio" name="precisionLayer4" value="torch.float32"> Float32
+         </label>
+         <label>
+             <input type="radio" class="precision-radio" name="precisionLayer4" value="torch.float64"> Float64
+         </label>
+     </form>
+
+    <div id="loss-plot-container">
+        <canvas id="lossChart"></canvas>
+    </div>
+    <div id="accuracy-plot-container">
+        <canvas id="accuracyChart"></canvas>
+    </div>
+    <div id="batchtime-plot-container">
+        <canvas id="timeChart"></canvas>
+    </div>
+    <script>
+        function updateMetrics() {
+            fetch('/get_metrics')  // Replace with the correct API endpoint URL
+                .then(response => response.json())
+                .then(data => {
+                    // Update the HTML elements with the received data
+                    document.getElementById('loss').textContent = data.loss;
+                    document.getElementById('accuracy').textContent = data.accuracy;
+                    document.getElementById('batch_time').textContent = data.batch_time;
+                })
+                .catch(error => {
+                    console.error('Error fetching metrics:', error);
+                });
+        }
+        setInterval(updateMetrics, 5000);
+    </script>
+    <script>
+        // Initialize chart data
+        var lossData = {
+            labels: [],
+            datasets: [{
+                label: 'Loss',
+                data: [],
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderWidth: 1,
+            }]
+        };
+    
+        var accuracyData = {
+            labels: [],
+            datasets: [{
+                label: 'Accuracy',
+                data: [],
+                borderColor: 'rgba(0, 255, 0, 1)',
+                backgroundColor: 'rgba(0, 255, 0, 0.2)',
+                borderWidth: 1,
+            }]
+        };
+
+        var timeData = {
+            labels: [],
+            datasets: [{
+                label: 'Batch_time',
+                data: [],
+                borderColor: 'rgba(0, 0, 255, 1)',
+                backgroundColor: 'rgba(0, 0, 255, 0.2)',
+                borderWidth: 1,
+            }]
+        };
+    
+        var lossChart = new Chart(document.getElementById('lossChart').getContext('2d'), {
+            type: 'line',
+            data: lossData,
+        });
+    
+        var accuracyChart = new Chart(document.getElementById('accuracyChart').getContext('2d'), {
+            type: 'line',
+            data: accuracyData,
+        });
+
+        var timeChart = new Chart(document.getElementById('timeChart').getContext('2d'), {
+            type: 'line',
+            data: timeData,
+        });
+    
+        // Function to update the charts with new data
+        function updateCharts() {
+            fetch('/get_metrics')
+                .then(response => response.json())
+                .then(data => {
+                    // Update the chart data
+                    lossData.labels.push(new Date().toLocaleTimeString());
+                    lossData.datasets[0].data.push(data.loss);
+    
+                    accuracyData.labels.push(new Date().toLocaleTimeString());
+                    accuracyData.datasets[0].data.push(data.accuracy);
+
+                    timeData.labels.push(new Date().toLocaleTimeString());
+                    timeData.datasets[0].data.push(data.batch_time);
+    
+                    lossChart.update();
+                    accuracyChart.update();
+                    timeChart.update();
+                });
+        }
+    
+        // Call the updateCharts function every 5 seconds (adjust as needed)
+        setInterval(updateCharts, 5000);
+    </script>    
+    <script>
+        // Add event listeners for precision radio buttons
+        document.querySelectorAll('input[type=radio]').forEach(input => {
+            input.addEventListener('change', function() {
+                const layer = this.name.replace('precisionLayer', '');
+                const precision = this.value;
+                changePrecision(layer, precision); // Call a function to change precision
+            });
+        });
+    
+        function changePrecision(layer, precision) {
+            // Send an AJAX request to the Flask app with layer and precision information
+            fetch(`/change_precision?layer=${layer}&precision=${precision}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response if needed
+                    console.log(data.message);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+</html>
+

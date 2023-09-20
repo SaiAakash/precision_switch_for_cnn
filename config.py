@@ -1,0 +1,9 @@
+batch_size = 64
+test_batch_size = 1000
+epochs = 1
+alpha = 1
+gamma = 0.5
+seed_value = 0      # Do not change
+log_interval = 10
+save_model = True
+precision_change_freq = 100

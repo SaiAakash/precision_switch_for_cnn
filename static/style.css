@@ -1,0 +1,59 @@
+body {
+    background: linear-gradient(90deg, #b8cfc9, #94c4c1); /* Replace with your desired colors */
+}
+
+/* CSS for styling the loss and accuracy plots */
+.plot {
+    background-color: rgb(151, 218, 198); /* Set background color */
+    border: 1px solid rgb(20, 19, 19); /* Add a border */
+    border-radius: 5px; /* Round the corners */
+}
+
+/* CSS for metric text */
+.metric-text {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.parameter-text {
+    font-size: 12px;
+    color: #333;
+}
+
+/* CSS for centered text */
+.center-text {
+    text-align: center;
+    font-size: 35px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+/* CSS for positioning plot containers */
+#loss-plot-container {
+    color: #111311;
+    width: 400px;
+    height: 450px;
+    margin: 20px; /* Adjust margin for spacing */
+    position: absolute; /* Use absolute positioning */
+    top: 150px; /* Set the desired top position */
+    left: 430px; /* Set the desired left position */
+}
+
+#accuracy-plot-container {
+    width: 400px;
+    height: 450px;
+    margin: 20px; /* Adjust margin for spacing */
+    position: absolute; /* Use absolute positioning */
+    top: 150px; /* Set the desired top position */
+    left: 880px; /* Set the desired left position */
+}
+
+#batchtime-plot-container {
+    width: 400px;
+    height: 450px;
+    margin: 20px; /* Adjust margin for spacing */
+    position: absolute; /* Use absolute positioning */
+    top: 400px; /* Set the desired top position */
+    left: 600px; /* Set the desired left position */
+}
