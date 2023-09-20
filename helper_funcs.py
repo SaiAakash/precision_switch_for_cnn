@@ -52,7 +52,7 @@ def send_metrics(loss, accuracy, batch_time):
 
 ####### Function to log the training data to a csv file ########
 
-def log_training_data(epoch, batch_idx, loss, accuracy, batch_time, precision_dict, csv_filename='training_log_mpt.csv'):
+def log_training_data(epoch, batch_idx, loss, accuracy, batch_time, precision_dict, csv_filename):
     if not os.path.isfile(csv_filename):
         with open(csv_filename, 'w', newline='') as file:
             writer = csv.writer(file)

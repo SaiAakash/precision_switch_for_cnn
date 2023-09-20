@@ -75,7 +75,7 @@ def train(model, device, train_loader, optimizer, epoch):
         end_time = time.time()
         batch_time = end_time - start_time
         send_metrics(round(loss.item(), 5), round(train_acc, 5), round(batch_time, 5))
-        log_training_data(epoch, batch_idx, loss.item(), train_acc, batch_time, precision_dict)
+        log_training_data(epoch, batch_idx, loss.item(), train_acc, batch_time, precision_dict, 'training_log_f32.csv')
         if batch_idx % log_interval == 0:
             sanity_check_status = sanity_check_precision(model, precision_dict)
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
