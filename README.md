@@ -4,5 +4,5 @@ A simple interactive dashboard to switch precision of weights and activations fo
 
 **Installation Instructions** 
 
-'''bash
+```bash
 $ git clone https://github.com/SaiAakash/precision_switch_for_cnn.git    
