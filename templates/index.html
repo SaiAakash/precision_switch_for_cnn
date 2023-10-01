@@ -169,7 +169,7 @@
         });
     
         function changePrecision(layer, precision) {
-            // Send an AJAX request to the Flask app with layer and precision information
+            // Send a request to the Flask app with layer and precision information
             fetch(`/change_precision?layer=${layer}&precision=${precision}`)
                 .then(response => response.json())
                 .then(data => {
